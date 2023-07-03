@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
+import DataTableExtensions from "react-data-table-component-extensions";
 
 const Productos = () => {
   const [products, setProducts] = useState([]);
@@ -167,12 +168,19 @@ const Productos = () => {
         </Row>
         <Row>
           <Col xs={12} className="mt-2">
+            <DataTableExtensions
+                columns={columns}
+                data={products}
+                print={true}
+                export={true}
+            >
             <DataTable
                 columns={columns}
                 data={products}
                 pagination
                 paginationPerPage={10}
             />
+            </DataTableExtensions>
           </Col>
           <Col className="mt-2">
             <Modal show={modalOpen} onHide={handleModalClose}>

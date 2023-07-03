@@ -1,14 +1,14 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Dashboard } from "./components/Dashboard";
-import { Fabricantes } from "./components/fabricantes/Fabricantes";
+import  Dashboard  from "./components/Dashboard";
+import  Fabricantes  from "./components/fabricantes/Fabricantes";
 import Productos from './components/productos/Productos';
-import { Menu } from "./components/Menu";
+import { NavBar } from "./components/NavBar";
 
 function App() {
   return (
     <>
-      <Menu />
+      <NavBar />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Dashboard />} />
