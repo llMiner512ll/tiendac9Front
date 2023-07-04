@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
-import DataTableExtensions from "react-data-table-component-extensions";
+import DataTableExtensions from 'react-data-table-component-extensions';
 
-const Productos = () => {
+export const Productos = () => {
   const [products, setProducts] = useState([]);
   const [fabricantes, setFabricantes] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,7 +23,10 @@ const Productos = () => {
     try {
       const response = await fetch('https://localhost:7299/api/Fabricante');
       const data = await response.json();
-      setFabricantes(data);
+      setFabricantes([
+        { codigo: 0, nombre: 'Seleccione una marca'},
+        ...data
+      ]);
     } catch (error) {
       console.error('Error fetching fabricantes:', error);
     }
@@ -55,7 +58,6 @@ const Productos = () => {
   };
 
   const handleDeleteProduct = (codigo) => {
-    // Open confirmation modal and handle delete if confirmed
     const confirmDelete = window.confirm('¿Estás seguro de eliminar este producto?');
     if (confirmDelete) {
       deleteProduct(codigo);
@@ -67,7 +69,7 @@ const Productos = () => {
       await fetch(`https://localhost:7299/api/Producto/${codigo}`, {
         method: 'DELETE'
       });
-      fetchProductos(); // Refetch the updated list of products
+      fetchProductos();
     } catch (error) {
       console.error('Error deleting product:', error);
     }
@@ -79,10 +81,12 @@ const Productos = () => {
 
   const handleModalSubmit = (e) => {
     e.preventDefault();
-    if (selectedProduct.codigo === 0) {
-      addProduct(selectedProduct);
-    } else {
-      updateProduct(selectedProduct);
+    if (selectedProduct.codigoFabricante !== 0) {
+      if (selectedProduct.codigo === 0) {
+        addProduct(selectedProduct);
+      } else {
+        updateProduct(selectedProduct);
+      }
     }
   };
 
@@ -95,7 +99,7 @@ const Productos = () => {
         },
         body: JSON.stringify(product)
       });
-      fetchProductos(); // Refetch the updated list of products
+      fetchProductos();
       setModalOpen(false);
     } catch (error) {
       console.error('Error adding product:', error);
@@ -111,7 +115,7 @@ const Productos = () => {
         },
         body: JSON.stringify(product)
       });
-      fetchProductos(); // Refetch the updated list of products
+      fetchProductos();
       setModalOpen(false);
     } catch (error) {
       console.error('Error updating product:', error);
@@ -122,22 +126,22 @@ const Productos = () => {
     {
       name: '#',
       selector: (_, index) => index + 1,
-      sortable: false,
+      sortable: false
     },
     {
       name: 'Nombre',
       selector: 'nombre',
-      sortable: true,
+      sortable: true
     },
     {
       name: 'Precio',
       selector: 'precio',
-      sortable: true,
+      sortable: true
     },
     {
       name: 'Fabricante',
       selector: 'codigoFabricanteNavigation.nombre',
-      sortable: true,
+      sortable: true
     },
     {
       name: 'Actualizar',
@@ -145,7 +149,7 @@ const Productos = () => {
           <Button variant="outline-warning" onClick={() => handleEditProduct(row)}>
             Actualizar
           </Button>
-      ),
+      )
     },
     {
       name: 'Eliminar',
@@ -153,8 +157,8 @@ const Productos = () => {
           <Button variant="outline-danger" onClick={() => handleDeleteProduct(row.codigo)}>
             Eliminar
           </Button>
-      ),
-    },
+      )
+    }
   ];
 
   return (
@@ -168,18 +172,8 @@ const Productos = () => {
         </Row>
         <Row>
           <Col xs={12} className="mt-2">
-            <DataTableExtensions
-                columns={columns}
-                data={products}
-                print={true}
-                export={true}
-            >
-            <DataTable
-                columns={columns}
-                data={products}
-                pagination
-                paginationPerPage={10}
-            />
+            <DataTableExtensions columns={columns} data={products} print={false} export={false}>
+              <DataTable columns={columns} data={products} pagination paginationPerPage={10} />
             </DataTableExtensions>
           </Col>
           <Col className="mt-2">
@@ -219,12 +213,15 @@ const Productos = () => {
                       ))}
                     </Form.Control>
                   </Form.Group>
-                  <Button variant="primary" type="submit">
+                  <div className="m-2">
+                  <Button variant="primary" type="submit" disabled={selectedProduct.codigoFabricante === 0}>
                     Guardar
                   </Button>
+                    &nbsp;
                   <Button variant="secondary" onClick={handleModalClose}>
                     Cancelar
                   </Button>
+                  </div>
                 </Form>
               </Modal.Body>
             </Modal>
@@ -233,5 +230,3 @@ const Productos = () => {
       </Container>
   );
 };
-
-export default Productos;

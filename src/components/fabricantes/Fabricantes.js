@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import DataTable from 'react-data-table-component';
 import DataTableExtensions from "react-data-table-component-extensions";
 
-const Fabricantes = () => {
+export const Fabricantes = () => {
   const [fabricantes, setFabricantes] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFabricante, setSelectedFabricante] = useState({
@@ -200,4 +200,3 @@ const Fabricantes = () => {
   );
 };
 
-export default Fabricantes;

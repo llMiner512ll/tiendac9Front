@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import  Dashboard  from "./components/Dashboard";
-import  Fabricantes  from "./components/fabricantes/Fabricantes";
-import Productos from './components/productos/Productos';
+import  { Dashboard }  from "./components/Dashboard";
+import  { Fabricantes } from "./components/fabricantes/Fabricantes";
+import { Productos } from './components/productos/Productos';
 import { NavBar } from "./components/NavBar";
 
 function App() {
